@@ -1,0 +1,24 @@
+name: Despliegue a Azure
+
+on:
+    push:
+        branches:
+            - main
+  
+jobs:
+    deploy:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v2
+
+            - name: Copy files via ssh password
+              uses: appleboy/scp-action@v0.1.4
+              env:
+                HOST: ${{ secrets.HOST }}
+                USERNAME: ${{ secrets.USERNAME }}
+                PORT: ${{ secrets.PORT }}
+                KEY: ${{ secrets.SSHKEY }}
+              with:
+               source: "./project"
+               target: "/var/www/html"
